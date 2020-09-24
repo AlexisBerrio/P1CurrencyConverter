@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Initialize variables with values from both spinners
         value1 = conversor1_spinner.selectedItem.toString()
         value2 = conversor2_spinner.selectedItem.toString()
 
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             onItemSelectedListener = this@MainActivity
         }
 
-        // Update values in Text View Out when input changes
+        // Update values in Text View Out when input in Edit Text changes
         conversor_editTextNumberDecimal.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {}
@@ -65,52 +66,93 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             ) {
             }
 
+            // When input on Edit Text changes, do the following
             override fun onTextChanged(
                 s: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
-                numToConvert = s.toString().toDouble()
+                // numToConvert = actual value from Edit Text or 0.0 when is Empty, without this
+                // conditional, app crashes because it can't convert to String a null value
+                numToConvert = if (s.isEmpty()) 0.0
+                else s.toString().toDouble()
+                // Make a call to function that displays the actualized value
                 convertValor()
             }
         })
 
     }
 
+    // Update values from spinners when detect a change
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
         value1 = conversor1_spinner.selectedItem.toString()
         value2 = conversor2_spinner.selectedItem.toString()
+
+        // Make a call to function that displays the actualized value
         convertValor()
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) = Unit
 
+    // Depending on spinners and Edit text values, this function makes the current conversion
     fun convertValor() {
         when (value1) {
             "COP" -> {
-                numConverted = when (value2) {
-                    "USD" -> numToConvert * copToUsd
-                    "EUR" -> numToConvert * copToEur
-                    else -> numToConvert
+                moneda_in_textView.text = getString(R.string.peso)
+                when (value2) {
+                    "USD" -> {
+                        numConverted = numToConvert * copToUsd
+                        moneda_out_textView.text = getString(R.string.dolar)
+                    }
+                    "EUR" -> {
+                        numConverted = numToConvert * copToEur
+                        moneda_out_textView.text = getString(R.string.euro)
+                    }
+                    else -> {
+                        numConverted = numToConvert
+                        moneda_out_textView.text = getString(R.string.peso)
+                    }
                 }
             }
             "USD" -> {
-                numConverted = when (value2) {
-                    "COP" -> numToConvert * usdToCop
-                    "EUR" -> numToConvert * usdToEur
-                    else -> numToConvert
+                moneda_in_textView.text = getString(R.string.dolar)
+                when (value2) {
+                    "COP" -> {
+                        numConverted = numToConvert * usdToCop
+                        moneda_out_textView.text = getString(R.string.peso)
+                    }
+                    "EUR" -> {
+                        numConverted = numToConvert * usdToEur
+                        moneda_out_textView.text = getString(R.string.euro)
+                    }
+                    else -> {
+                        numConverted = numToConvert
+                        moneda_out_textView.text = getString(R.string.dolar)
+                    }
                 }
             }
             "EUR" -> {
-                numConverted = when (value2) {
-                    "COP" -> numToConvert * eurToCop
-                    "USD" -> numToConvert * eurToUsd
-                    else -> numToConvert
+                moneda_in_textView.text = getString(R.string.euro)
+                when (value2) {
+                    "COP" -> {
+                        numConverted = numToConvert * eurToCop
+                        moneda_out_textView.text = getString(R.string.peso)
+                    }
+                    "USD" -> {
+                        numConverted = numToConvert * eurToUsd
+                        moneda_out_textView.text = getString(R.string.dolar)
+                    }
+                    else -> {
+                        numConverted = numToConvert
+                        moneda_out_textView.text = getString(R.string.euro)
+                    }
                 }
             }
-
         }
+        // Limit decimal format to 4
+        numConverted = "%.4f".format(numConverted).toDouble()
         conversor_out_textView.text = numConverted.toString()
     }
+
 }
 

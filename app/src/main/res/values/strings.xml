@@ -2,6 +2,9 @@
     <string name="app_name">Conversor de Monedas</string>
     <string name="digite_numero">Digite el número</string>
     <string name="cero">0</string>
+    <string name="dolar">Dólar Estadounidense</string>
+    <string name="peso">Peso Colombiano</string>
+    <string name="euro">Euro</string>
 
     <string-array name="moneda1">
         <item>COP</item>
@@ -9,10 +12,5 @@
         <item>EUR</item>
     </string-array>
 
-    <string-array name="moneda2">
-        <item>USD</item>
-        <item>EUR</item>
-        <item>COP</item>
-    </string-array>
 
 </resources>
