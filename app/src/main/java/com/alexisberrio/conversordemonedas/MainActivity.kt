@@ -1,3 +1,9 @@
+/*
+Currency converter
+Created by:
+            Alexis Berrio Arenas
+            Dario Fernando Arévalo
+ */
 package com.alexisberrio.conversordemonedas
 
 import android.os.Bundle
